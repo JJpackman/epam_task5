@@ -1,16 +1,12 @@
 package com.company.subtask1.contoller.command;
 
 import com.company.subtask1.model.Journal;
-import com.company.subtask1.model.entity.Address;
-import com.company.subtask1.model.entity.FullName;
-import com.company.subtask1.model.entity.Record;
+import com.company.subtask1.model.entity.*;
 import com.company.subtask1.model.enums.ValidatedFields;
-import com.company.subtask1.utils.UserInput;
-import com.company.subtask1.utils.Validator;
+import com.company.subtask1.utils.*;
 import com.company.subtask1.view.View;
-
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.format.*;
 
 public class AddRecord implements Command {
     private View view;
@@ -19,6 +15,16 @@ public class AddRecord implements Command {
     public AddRecord(View view, Journal model) {
         this.view = view;
         this.model = model;
+    }
+
+    private LocalDate getDate(String str, DateTimeFormatter[] formatters) {
+        for (DateTimeFormatter formatter : formatters) {
+            try {
+                return LocalDate.parse(str, formatter);
+            } catch (DateTimeParseException ignored) {}
+        }
+
+        return null;
     }
 
     @Override
@@ -102,10 +108,15 @@ public class AddRecord implements Command {
             }
         }
 
+        final DateTimeFormatter[] formatters = {
+                DateTimeFormatter.ofPattern("dd.MM.yyyy"),
+                DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+                DateTimeFormatter.ofPattern("dd-MM-yyyy")
+        };
+
         model.addRecord(new Record.Builder()
                 .setAddress(new Address(street, building, Integer.parseInt(rNumber)))
-                // TODO: fix data conversion errors
-                .setDateOfBirth(LocalDate.parse(birthDate, DateTimeFormatter.ofPattern(birthDate)))
+                .setDateOfBirth(getDate(birthDate, formatters))
                 .setFullName(new FullName(fName, lName))
                 .setPhoneNumber(pNumber)
                 .getRecord()

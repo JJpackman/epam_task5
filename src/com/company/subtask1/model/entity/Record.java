@@ -31,6 +31,11 @@ public class Record {
         return phoneNumber;
     }
 
+    @Override
+    public String toString() {
+        return String.format("(%s %s) %s %s", fullname, dateOfBirth, address, phoneNumber);
+    }
+
     public static class Builder {
         private FullName fullName;
         private LocalDate dateOfBirth;

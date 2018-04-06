@@ -13,7 +13,7 @@ public class View {
     }
 
     public void printMsg(String msg) {
-        System.out.println(ANSI_GREEN + msg + ANSI_RESET);
+        System.out.println(ANSI_PURPLE + msg + ANSI_RESET);
     }
 
     public void printError(String msg) {
